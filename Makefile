@@ -1,14 +1,12 @@
-DEBUG=1
-ARCHS = armv7 arm64
+INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
 
-BUNDLE_NAME = ApolloOpener
-ApolloOpener_FILES = XXXApolloOpener.m
-ApolloOpener_INSTALL_PATH = /Library/Opener
-ApolloOpener_EXTRA_FRAMEWORKS = Opener
+BUNDLE_NAME = AutoApollo
+AutoApollo_FILES = XXXApolloOpener.m
+AutoApollo_INSTALL_PATH = /Library/Opener
+AutoApollo_EXTRA_FRAMEWORKS = Opener
+
+THEOS_DEVICE_IP = 144.118.101.96
 
 include $(THEOS_MAKE_PATH)/bundle.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"
