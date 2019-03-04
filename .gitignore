@@ -1,3 +1,4 @@
 .theos/
 Makefile
 control
+.DS_Store
