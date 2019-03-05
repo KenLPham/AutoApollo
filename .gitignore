@@ -2,3 +2,5 @@
 Makefile
 control
 .DS_Store
+packages/
+*.deb
