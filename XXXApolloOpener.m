@@ -14,7 +14,12 @@
 }
 
 - (id) openURL:(NSURL *)url sender:(NSString *)sender {
-    if ([url.host isEqualToString:@"www.reddit.com"] ||
+    // issue: amp is being a bitch
+    if ([url.path containsString:@"amp.reddit.com"]) {
+        NSString *path = [url.path stringByRemovingPercentEncoding];
+        NSString *ampUrl = [path stringByReplacingOccurrencesOfString:@"amp/s/amp." withString:@"apollo://"];
+        return [NSURL URLWithString:ampUrl];
+    } else if ([url.host isEqualToString:@"www.reddit.com"] ||
         [url.host isEqualToString:@"reddit.com"] ||
         [url.host isEqualToString:@"m.reddit.com"] ||
         [url.host isEqualToString:@"old.reddit.com"] ||
@@ -25,17 +30,22 @@
         } else {
             return [NSURL URLWithString:[NSString stringWithFormat:@"apollo://reddit.com%@/?%@", url.path, url.query]];
         }
-    } else if ([url.path containsString:@"amp.reddit.com"]) { // -- v1.0.1 - Actually added amp support --
-        NSString *path = [url.path stringByRemovingPercentEncoding];
-        NSString *ampUrl = [path stringByReplacingOccurrencesOfString:@"amp/s/amp." withString:@"apollo://"];
-        return [NSURL URLWithString:ampUrl];
+    // -- v1.0.3 - Should fix opening links in safari when openning browsers, should still support phone calls
+    } else if ([url.scheme isEqualToString:@"http"] || [url.scheme isEqualToString:@"https"]) {
+        if ([url.host isEqualToString:@"opener.hbang.ws"]) {
+            NSString *decoded = [url.query stringByRemovingPercentEncoding];
+            NSString *trimmed = [decoded stringByReplacingOccurrencesOfString:@"original=" withString:@""];
+            NSString *converted = [trimmed stringByReplacingOccurrencesOfString:@" " withString:@""];
+            return [NSURL URLWithString:converted];
+        } else if ([url.host isEqualToString:@"youtu.be"]) { // -- v1.0.3 - fix youtube opening in safari --
+            NSString *videoId = [url.path stringByRemovingPercentEncoding];
+            return [NSURL URLWithString:[NSString stringWithFormat:@"youtube://%@", videoId]];
+        } else return nil; // Stops urls from opening in Safari
+    } else {
+        NSString *decoded = [url.absoluteString stringByRemovingPercentEncoding];
+        NSString *converted = [decoded stringByReplacingOccurrencesOfString:@" " withString:@""];
+        return [NSURL URLWithString:converted];
     }
-
-    // -- v1.0.1 - Made it so other links actuall opened
-    NSString *decoded = [url.absoluteString stringByRemovingPercentEncoding];
-    NSString *trimmed = [decoded stringByReplacingOccurrencesOfString:@"http://opener.hbang.ws/_opener_app_link_hax_?original=" withString:@""];
-    NSString *converted = [trimmed stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return [NSURL URLWithString:converted];
 }
 
 @end
