@@ -1,12 +1,11 @@
-INSTALL_TARGET_PROCESSES = SpringBoard
-
 include $(THEOS)/makefiles/common.mk
 
-BUNDLE_NAME = AutoApollo
-AutoApollo_FILES = XXXApolloOpener.m
-AutoApollo_INSTALL_PATH = /Library/Opener
-AutoApollo_EXTRA_FRAMEWORKS = Opener
+TWEAK_NAME = AutoApollo2
+AutoApollo2_FILES = Tweak.xm $(wildcard Extra/*.m)
+AutoApollo2_FRAMEWORKS = CoreServices SafariServices
+AutoApollo2_PRIVATE_FRAMEWORKS = FrontBoard FrontBoardServices
 
-THEOS_DEVICE_IP = 144.118.101.96
+include $(THEOS_MAKE_PATH)/tweak.mk
 
-include $(THEOS_MAKE_PATH)/bundle.mk
+after-install::
+	install.exec "killall -9 SpringBoard"

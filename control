@@ -1,9 +1,9 @@
-Package: com.kayfam.autoapollo
-Name: AutoApollo
-Depends: mobilesubstrate, ws.hbang.libopener (>= 3.1.2), com.spark.libsparkapplist
-Version: 1.0.3
+Package: com.kayfam.autoapollo2
+Name: AutoApollo2
+Depends: mobilesubstrate
+Version: 2.0.0
 Architecture: iphoneos-arm
-Description: Open "reddit.com" links in the Apollo app using libOpener.
-Maintainer: gilshahar7, KayFam
-Author: gilshahar7, KayFam
+Description: Open reddit links in Apollo without libOpener
+Maintainer: KayFam
+Author: KayFam
 Section: Tweaks
